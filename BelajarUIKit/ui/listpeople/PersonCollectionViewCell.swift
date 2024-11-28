@@ -23,7 +23,7 @@ class PersonCollectionViewCell: UICollectionViewCell {
             guard let firstName = itemPeople?.firstName,
                   let lastName = itemPeople?.lastName,
                   let email = itemPeople?.email,
-                  let avatar = itemPeople?.avatar else { return }
+                  let _ = itemPeople?.avatar else { return }
             
             personView?.setText(name: "\(firstName) \(lastName)", email: email)
         }

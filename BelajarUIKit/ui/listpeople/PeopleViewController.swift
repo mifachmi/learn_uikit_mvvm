@@ -20,19 +20,16 @@ class PeopleViewController: UIViewController {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.register(PersonCollectionViewCell.self, forCellWithReuseIdentifier: "PersonCollectionViewCell")
         cv.dataSource = self // setup data source
-        //cv.delegate = self
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("ViewController - viewDidLoad")
         setupView()
         peopleVm.delegate = self
         peopleVm.getUsers()
     }
-    
     
 }
 
@@ -89,9 +86,4 @@ private extension PeopleViewController {
             cv.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
-    func sayHello() {
-        print("I'm subscribing")
-    }
-    
 }
