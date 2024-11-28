@@ -67,6 +67,11 @@ class PersonView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setText(name: String, email: String) {
+        nameLabel.text = name
+        emailLabel.text = email
+    }
+    
 }
 
 private extension PersonView {
@@ -81,7 +86,7 @@ private extension PersonView {
         
         // add view to personStackView
         //personStackView.addArrangedSubview(nameLabel)
-        personStackView.addArrangedSubview(nameLabelFunc(name: "Fachmi Dimas Ardhana"))
+        personStackView.addArrangedSubview(nameLabel)
         personStackView.addArrangedSubview(emailLabel)
         personStackView.addArrangedSubview(subscribeBtn)
         
