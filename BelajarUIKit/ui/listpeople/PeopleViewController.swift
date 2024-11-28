@@ -9,32 +9,66 @@ import UIKit
 
 class PeopleViewController: UIViewController {
     
-    private lazy var personView: PersonView = {
-        let view = PersonView { [weak self] in
-            self?.sayHello()
-        }
-        return view
+    private var peopleVm = PeopleViewModel()
+    
+    private lazy var cv: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.itemSize = .init(width: UIScreen.main.bounds.width, height: 130) // main will be deprecated
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.register(PersonCollectionViewCell.self, forCellWithReuseIdentifier: "PersonCollectionViewCell")
+        cv.dataSource = self // setup data source
+        //cv.delegate = self
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        return cv
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("ViewController - viewDidLoad")
         setupView()
+        peopleVm.delegate = self
+        peopleVm.getUsers()
     }
     
+    
+}
+
+extension PeopleViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        peopleVm.users.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PersonCollectionViewCell", for: indexPath) as! PersonCollectionViewCell
+        return cell
+    }
+    
+}
+
+extension PeopleViewController: PeopleViewModelDelegate {
+    func didFinish() {
+        cv.reloadData()
+    }
+    
+    func didFail(with error: any Error) {
+        print(error.localizedDescription)
+    }
     
 }
 
 private extension PeopleViewController {
     func setupView() {
         view.backgroundColor = .white
-        view.addSubview(personView)
+        view.addSubview(cv)
         
         // configure constraint
         NSLayoutConstraint.activate([
-            personView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            personView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            personView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            cv.topAnchor.constraint(equalTo: view.topAnchor),
+            cv.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            cv.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cv.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
